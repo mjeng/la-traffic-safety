@@ -3,8 +3,8 @@ from point import Point
 import pickle
 
 class Grid:
-    def __init__(self,min_lat=None,max_lat=None,min_lon=None,max_lon=None,step_size=None, pickle_file_name = None):
-        if pickle_file_name ==None:
+    def __init__(self, min_lat=None, max_lat=None, min_lon=None, max_lon=None, step_size=None, pickle_file_name=None):
+        if pickle_file_name is None:
             self.min_lat = min_lat // 1
             self.max_lat = (max_lat + 1) // 1
             self.min_lon = (min_lon - 1) // 1
@@ -32,12 +32,11 @@ class Grid:
         y_num = int(y_num)
         x_num = int(x_num)
         grid = [[[] for i in range(x_num)] for j in range(y_num)]
-        for index, row in data.iterrows():
+        for _, row in data.iterrows():
             p = Point(row['Latitude'], row['Longitude'])
             row_index, col_index = self.index_helper(p)
             grid[row_index][col_index].append(p)
         self.grid = grid
-        #print(grid)
         pickle.dump(self, open(pickle_file_name, "wb" ) )
 
     def get_score(self,pt, radius):
