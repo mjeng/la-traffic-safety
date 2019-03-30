@@ -44,20 +44,25 @@ function initialize() {
     findPoints(directionsDisplay.getDirections());
   });
 
-  autocomplete_start.bindTo('bounds', map);
-  autocomplete_end.bindTo('bounds', map);
-  autocomplete_start.addListener('start_changed', autoSetup(autocomplete_start, marker));
-  autocomplete_end.addListener('end_changed', autoSetup(autocomplete_end, marker));
+  // autocomplete_start.bindTo('bounds', map);
+  // autocomplete_end.bindTo('bounds', map);
+  autocomplete_start.addListener('directions_changed', autoSetup(autocomplete_start, marker));
+  autocomplete_end.addListener('directions_changed', autoSetup(autocomplete_end, marker));
 
-  drawColoredPath(data);  
+  drawColoredPath(data);
 }
 
 function autoSetup(autocomplete, marker) {
+  if (autocomplete == autocomplete_end) {
+    console.log("END");
+  }
+  console.log("hmmmm");
   marker.setVisible(false);
   var place = autocomplete.getPlace();
   if (place.geometry.viewport) {
     map.fitBounds(place.geometry.viewport);
   } else {
+    console.log("we here");
     map.setCenter(place.geometry.location);
     map.setZoom(17);
   }
