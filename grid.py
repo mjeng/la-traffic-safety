@@ -20,9 +20,6 @@ class Grid:
             self.step_size = float(pick.step_size)
             self.grid = pick.grid
 
-
-
-
     def create_grid(self,data_file, pickle_file_name = None):
         """
         Takes in raw data, creates Grid instance.
@@ -47,8 +44,8 @@ class Grid:
         actual_row_index, actual_col_index = self.index_helper(pt)
         potential_pts = []
         ##CHANGE
-        vtemplat=float(pt.get_lat())
-        vtemplon=float(pt.get_lon())
+        vtemplat=pt.get_lat()
+        vtemplon=pt.get_lon()
 
         new_max_lat, col_index = self.index_helper(Point(vtemplat + radius, vtemplon))
         new_min_lat, col_index = self.index_helper(Point(vtemplat - radius, vtemplon))
