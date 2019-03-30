@@ -55,6 +55,8 @@ def get_min_max_scores(grid_file, radius):
 
 def normalize_scores(lat_lon_scores, min_score, max_score):
     normalized_scores = [[score[0], score[1], (score[2] - min_score)/max_score] for score in lat_lon_scores]
+    normalized_scores = [[score[0],score[1],0] if score[2]<0 else score for score in normalized_scores]
+    normalized_scores = [[score[0],score[1],1] if score[2]>1 else score for score in normalized_scores ]
     return normalized_scores
 
 
