@@ -1,3 +1,4 @@
+
 var apiKey = 'AIzaSyD_T8LTOKpg7oO6G9V21fRx2J_F-CawP14';
 
 var map;
@@ -5,15 +6,19 @@ var drawingManager;
 var placeIdArray = [];
 var polylines = [];
 var snappedCoordinates = [];
+var autocomplete_start;
+var autocomplete_end;
+var directionService;
+var directionsDisplay;
+var start_name;
+var end_name;
+var marker;
+
 
 function initialize() {
-  // var mapOptions = {
-  //   zoom: 17,
-  //   center: {lat: -33.8667, lng: 151.1955}
-  // };
-  ZOOM = 10;
+  DEFAULT_ZOOM = 10;
   var mapOptions = {
-    zoom: ZOOM,
+    zoom: DEFAULT_ZOOM,
     center: {lat: 34.070330000000006, lng: -118.45489}
   }
   map = new google.maps.Map(document.getElementById('map'), mapOptions);
@@ -22,151 +27,47 @@ function initialize() {
   // location.
   map.controls[google.maps.ControlPosition.RIGHT_TOP].push(
       document.getElementById('bar'));
-  var autocomplete = new google.maps.places.Autocomplete(
-      document.getElementById('autoc'));
-  autocomplete.bindTo('bounds', map);
-  autocomplete.addListener('place_changed', function() {
-    var place = autocomplete.getPlace();
-    if (place.geometry.viewport) {
-      map.fitBounds(place.geometry.viewport);
-    } else {
-      map.setCenter(place.geometry.location);
-      map.setZoom(ZOOM);
-    }
+  autocomplete_start = new google.maps.places.Autocomplete(
+      document.getElementById('autoc_start'));
+  autocomplete_end = new google.maps.places.Autocomplete(
+      document.getElementById('autoc_end'));
+  marker = new google.maps.Marker({
+          map: map,
+          anchorPoint: new google.maps.Point(0, -29)
+  });
+  directionsService = new google.maps.DirectionsService;
+  directionsDisplay = new google.maps.DirectionsRenderer({
+    draggable: true,
+    map: map,
   });
 
-  drawColoredPath(data);
+  directionsDisplay.addListener('directions_changed', function() {
+    findPoints(directionsDisplay.getDirections());
+  });
 
-  // // Enables the polyline drawing control. Click on the map to start drawing a
-  // // polyline. Each click will add a new vertice. Double-click to stop drawing.
-  // drawingManager = new google.maps.drawing.DrawingManager({
-  //   drawingMode: google.maps.drawing.OverlayType.POLYLINE,
-  //   drawingControl: true,
-  //   drawingControlOptions: {
-  //     position: google.maps.ControlPosition.TOP_CENTER,
-  //     drawingModes: [
-  //       google.maps.drawing.OverlayType.POLYLINE
-  //     ]
-  //   },
-  //   polylineOptions: {
-  //     strokeColor: '#696969',
-  //     strokeWeight: 2
-  //   }
-  // });
-  // drawingManager.setMap(map);
-
-  // // Snap-to-road when the polyline is completed.
-  // drawingManager.addListener('polylinecomplete', function(poly) {
-  //   var path = poly.getPath();
-  //   polylines.push(poly);
-  //   placeIdArray = [];
-  //   runSnapToRoad(path);
-  // });
-
-  // // Clear button. Click to remove all polylines.
-  // $('#clear').click(function(ev) {
-  //   for (var i = 0; i < polylines.length; ++i) {
-  //     polylines[i].setMap(null);
-  //   }
-  //   polylines = [];
-  //   ev.preventDefault();
-  //   return false;
-  // });
-
-  
+  // autocomplete_start.bindTo('bounds', map);
+  // autocomplete_end.bindTo('bounds', map);
+  autocomplete_start.addListener('place_changed', (e) => {
+    autoSetup(autocomplete_start, marker);
+  });
+  autocomplete_end.addListener('place_changed', (e) => {
+    autoSetup(autocomplete_end, marker);
+  });
 }
 
-// Snap a user-created polyline to roads and draw the snapped path
-// function runSnapToRoad(path) {
-//   var pathValues = [];
-//   for (var i = 0; i < path.getLength(); i++) {
-//     pathValues.push(path.getAt(i).toUrlValue());
-//   }
-
-//   $.get('https://roads.googleapis.com/v1/snapToRoads', {
-//     interpolate: true,
-//     key: apiKey,
-//     path: pathValues.join('|')
-//   }, function(data) {
-//     processSnapToRoadResponse(data);
-//     drawSnappedPolyline();
-//     // getAndDrawSpeedLimits();
-//   });
-// }
-
-// Store snapped polyline returned by the snap-to-road service.
-// function processSnapToRoadResponse(data) {
-//   snappedCoordinates = [];
-//   placeIdArray = [];
-//   for (var i = 0; i < data.snappedPoints.length; i++) {
-//     var latlng = new google.maps.LatLng(
-//         data.snappedPoints[i].location.latitude,
-//         data.snappedPoints[i].location.longitude);
-//     snappedCoordinates.push(latlng);
-//     placeIdArray.push(data.snappedPoints[i].placeId);
-//   }
-// }
-
-// Draws the snapped polyline (after processing snap-to-road response).
-// function drawSnappedPolyline() {
-//   var snappedPolyline = new google.maps.Polyline({
-//     path: snappedCoordinates,
-//     strokeColor: 'black',
-//     strokeWeight: 3
-//   });
-
-//   snappedPolyline.setMap(map);
-//   polylines.push(snappedPolyline);
-// }
-
-// Gets speed limits (for 100 segments at a time) and draws a polyline
-// color-coded by speed limit. Must be called after processing snap-to-road
-// response.
-function getAndDrawSpeedLimits() {
-  for (var i = 0; i <= placeIdArray.length / 100; i++) {
-    // Ensure that no query exceeds the max 100 placeID limit.
-    var start = i * 100;
-    var end = Math.min((i + 1) * 100 - 1, placeIdArray.length);
-
-    drawSpeedLimits(start, end);
+function autoSetup(autocomplete, marker) {
+  marker.setVisible(false);
+  var place = autocomplete.getPlace();
+  if (place.geometry.viewport) {
+    map.fitBounds(place.geometry.viewport);
+  } else {
+    console.log("we here");
+    map.setCenter(place.geometry.location);
+    map.setZoom(DEFAULT_ZOOM);
   }
+  marker.setPosition(place.geometry.location);
+  marker.setVisible(true);
 }
-
-// Gets speed limits for a 100-segment path and draws a polyline color-coded by
-// speed limit. Must be called after processing snap-to-road response.
-// function drawSpeedLimits(start, end) {
-//     var placeIdQuery = '';
-//     for (var i = start; i < end; i++) {
-//       placeIdQuery += '&placeId=' + placeIdArray[i];
-//     }
-
-//     $.get('https://roads.googleapis.com/v1/speedLimits',
-//         'key=' + apiKey + placeIdQuery,
-//         function(speedData) {
-//           processSpeedLimitResponse(speedData, start);
-//         }
-//     );
-// }
-
-// // Draw a polyline segment (up to 100 road segments) color-coded by speed limit.
-// function processSpeedLimitResponse(speedData, start) {
-//   var end = start + speedData.speedLimits.length;
-//   for (var i = 0; i < speedData.speedLimits.length - 1; i++) {
-//     var speedLimit = speedData.speedLimits[i].speedLimit;
-//     var color = getColorForSpeed(speedLimit);
-
-//     // Take two points for a single-segment polyline.
-//     var coords = snappedCoordinates.slice(start + i, start + i + 2);
-
-//     var snappedPolyline = new google.maps.Polyline({
-//       path: coords,
-//       strokeColor: color,
-//       strokeWeight: 6
-//     });
-//     snappedPolyline.setMap(map);
-//     polylines.push(snappedPolyline);
-//   }
-// }
 
 function drawColoredPath(weightedData) {
   for (var i = 0; i < weightedData.length - 1; i++) {
@@ -188,44 +89,73 @@ function drawColoredPath(weightedData) {
   }
 }
 
-// function drawColoredPath2(data) {
-//   var latlngs = [];
-//   for (var i = 0; i < data.length; i++) {
-//     var coord = new google.maps.LatLng(
-//       data[i][0], data[i][1]
-//     );
-//     latlngs.push(coord);
+
+// function getColorForSpeed(speed_kph) {
+//   if (speed_kph <= 40) {
+//     return 'purple';
 //   }
-//   var polyline = new google.maps.Polyline({
-//     path: latlngs,
-//     strokeColor: 'black',
-//     strokeWeight: 6
-//   });
-//   polyline.setMap(map);
+//   if (speed_kph <= 50) {
+//     return 'blue';
+//   }
+//   if (speed_kph <= 60) {
+//     return 'green';
+//   }
+//   if (speed_kph <= 80) {
+//     return 'yellow';
+//   }
+//   if (speed_kph <= 100) {
+//     return 'orange';
+//   }
+//   return 'red';
 // }
 
-// function getColorForWeight(weight) {
-//   return 'purple';
-// }
+function findRoute() {
+  marker.setVisible(false);
+  displayRoute(start_name, end_name, directionsService,
+      directionsDisplay);
+}
 
+function saveStart() {
+  var place = autocomplete_start.getPlace();
+  document.getElementById("saved_start").innerHTML = place.formatted_address;
+  start_name = place.formatted_address;
+}
 
-function getColorForSpeed(speed_kph) {
-  if (speed_kph <= 40) {
-    return 'purple';
+function saveEnd() {
+  var place = autocomplete_end.getPlace();
+  document.getElementById("saved_end").innerHTML = place.formatted_address;
+  end_name = place.formatted_address;
+}
+
+function displayRoute(origin, destination, service, display) {
+  service.route({
+    origin: origin,
+    destination: destination,
+    travelMode: 'DRIVING',
+    avoidTolls: true
+  }, function(response, status) {
+    if (status === 'OK') {
+      display.setDirections(response);
+    } else {
+      alert('Could not display directions due to: ' + status);
+    }
+  });
+}
+
+function findPoints(result) {
+  var points = [];
+  var myroute = result.routes[0].legs[0];
+  var all = "";
+  for (var i = 0; i < myroute.steps.length; i++) {
+    for (var j = 0; j < myroute.steps[i].path.length; j++) {
+      var lat = myroute.steps[i].path[j].lat();
+      var lng = myroute.steps[i].path[j].lng();
+      var tot = "\"" + lat + " " + lng + "\"";
+      points.push(tot)
+    }
   }
-  if (speed_kph <= 50) {
-    return 'blue';
-  }
-  if (speed_kph <= 60) {
-    return 'green';
-  }
-  if (speed_kph <= 80) {
-    return 'yellow';
-  }
-  if (speed_kph <= 100) {
-    return 'orange';
-  }
-  return 'red';
+  console.log(points);
+//  document.getElementById('total').innerHTML = points;
 }
 
 window.onload = initialize;
