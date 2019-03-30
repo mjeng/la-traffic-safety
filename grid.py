@@ -3,8 +3,8 @@ from point import Point
 import pickle
 
 class Grid:
-    def __init__(self,min_lat,max_lat,min_lon,max_lon,step_size,file_name=None):
-        if file_name is None:
+    def __init__(self,min_lat=None,max_lat=None,min_lon=None,max_lon=None,step_size=None, pickle_file_name = None):
+        if 'pickle_file_name' ==None:
             self.min_lat = min_lat // 1
             self.max_lat = (max_lat + 1) // 1
             self.min_lon = (min_lon - 1) // 1
@@ -12,7 +12,7 @@ class Grid:
             self.step_size = step_size
             self.grid = None
         else:
-            pick = pickle.load( open(file_name, "rb" ) )
+            pick = pickle.load( open(pickle_file_name, "rb" ) )
             self.min_lat = float(pick.min_lat)
             self.max_lat = float(pick.max_lat)
             self.min_lon = float(pick.min_lon)
