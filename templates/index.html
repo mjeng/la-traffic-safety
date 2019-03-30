@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Roads API Demo</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='roads.css')}}">
+
+    <!-- <script src="/_static/js/jquery-bundle.js"></script> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD_T8LTOKpg7oO6G9V21fRx2J_F-CawP14&libraries=drawing,places">
+    </script>
+    <script type=text/javascript charset="UTF-8" src="{{url_for('static', filename='roads.js')}}" type="module"></script>
+</head>
+
+<body>
+  <div id="map"></div>
+  <div id="bar">
+    <p> Set Route Start:</p>
+    <p class="auto"><input type="text" id="autoc_start"/></p>
+    <p> Set Route End:</p>
+    <p class="auto"><input type="text" id="autoc_end"/></p>
+<!--     <p><a id="clear" href="#">Click here</a> to clear map.</p>
+ -->    <button onclick="saveStart()">Confirm Start</button>
+    <button onclick="saveEnd()">Confirm Destination</button>
+    <button onclick="findRoute()">Show Route</button>
+    <p id="saved_start">Start:</p>
+    <p id="saved_end">End:</p>
+  </div>
+</body>
+</html>
