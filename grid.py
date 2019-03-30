@@ -11,14 +11,14 @@ class Grid:
         self.step_size = step_size
         self.grid = None
 
-    def __init__(self, grid_file):
-        pick = pickle.load( open( grid_file, "rb" ) )
-        self.min_lat = pick.min_lat
-        self.max_lat = pick.max_lat
-        self.min_lon = pick.min_lon
-        self.max_lon = pick.max_lon
-        self.step_size = pick.step_size
-        self.grid = pick.grid
+    # def __init__(self, grid_file):
+    #     pick = pickle.load( open( grid_file, "rb" ) )
+    #     self.min_lat = pick.min_lat
+    #     self.max_lat = pick.max_lat
+    #     self.min_lon = pick.min_lon
+    #     self.max_lon = pick.max_lon
+    #     self.step_size = pick.step_size
+    #     self.grid = pick.grid
 
 
     def create_grid(self,data_file, pickle_file_name = None):
