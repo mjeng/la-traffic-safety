@@ -21,8 +21,13 @@ class Grid:
             self.max_lon = float(pick.max_lon)
             self.step_size = float(pick.step_size)
             self.grid = pick.grid
-            self.max_score = pick.max_score
-            self.min_score = pick.min_score
+            if (pick.max_score is not None and pick.min_score is not None):
+                self.max_score = pick.max_score
+                self.min_score = pick.min_score
+            else:
+                self.max_score = None
+                self.min_score = None
+
 
     def get_grid(self):
         return self.grid
