@@ -45,8 +45,6 @@ function initialize() {
     findPoints(directionsDisplay.getDirections());
   });
 
-  // autocomplete_start.bindTo('bounds', map);
-  // autocomplete_end.bindTo('bounds', map);
   autocomplete_start.addListener('place_changed', (e) => {
     autoSetup(autocomplete_start, marker);
   });
@@ -150,12 +148,17 @@ function findPoints(result) {
     for (var j = 0; j < myroute.steps[i].path.length; j++) {
       var lat = myroute.steps[i].path[j].lat();
       var lng = myroute.steps[i].path[j].lng();
-      var tot = "\"" + lat + " " + lng + "\"";
+      var tot = lat + " " + lng ;
       points.push(tot)
     }
   }
-  console.log(points);
-//  document.getElementById('total').innerHTML = points;
+  //console.log(JSON.stringify(points));
+  $.post("/scoreRoute", JSON.stringify(points));
+}
+
+function startDrive() {
+  // call twillio python stuff
+  $.get("/assistant");
 }
 
 window.onload = initialize;
