@@ -11,6 +11,8 @@ class Grid:
             self.max_lon = max_lon // 1
             self.step_size = step_size
             self.grid = None
+            self.max_score = None
+            self.min_score = None
         else:
             pick = pickle.load( open(pickle_file_name, "rb" ) )
             self.min_lat = float(pick.min_lat)
@@ -19,6 +21,11 @@ class Grid:
             self.max_lon = float(pick.max_lon)
             self.step_size = float(pick.step_size)
             self.grid = pick.grid
+            self.max_score = pick.max_score
+            self.min_score = pick.min_score
+
+    def get_grid(self):
+        return self.grid
 
     def create_grid(self,data_file, pickle_file_name = None):
         """

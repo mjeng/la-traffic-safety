@@ -1,6 +1,7 @@
 from point import Point
 from grid import Grid
 import simplejson as json
+import pickle
 
 def get_all_scores(route_points,grid_file,radius):
     """
@@ -21,26 +22,35 @@ def get_all_scores(route_points,grid_file,radius):
         curr_route_point = from_js_route_pts[i]
         lat_lon_scores.append([curr_route_point.get_lat(),curr_route_point.get_lon(),grid.get_score(curr_route_point, radius)])
 
-    #min_score, max_score = get_min_max_scores(grid_file, radius)
-    #normalized = normalize_scores(lat_lon_scores, min_score, max_score)
+    min_score, max_score = get_min_max_scores(grid_file, radius)
+    print(min_score)
+    print(max_score)
+    normalized = normalize_scores(lat_lon_scores, min_score, max_score)
 
     #print(lon_lat_score
-    return lat_lon_scores
-    #return normalized
+    #return lat_lon_scores
+    return normalized
 
 def get_min_max_scores(grid_file, radius):
-    grid = Grid(pickle_file_name = grid_file)
+    grid_obj = Grid(pickle_file_name = grid_file)
+    if (grid_obj.max_score is not None):
+        print("here")
+        return grid_obj.min_score, grid_obj.max_score
+    grid = grid_obj.get_grid()
     max_score = float('-inf')
     min_score = float('inf')
-    lat = grid.min_lat
-    lon = grid.min_lon
-    while (lat < grid.max_lat):
-        while (lon < grid.max_lon):
-            score = grid.get_score(Point(lat, lon), radius)
-            max_score = max(score, max_score)
-            min_score = min(score, min_score)
-            lat += 2 * radius
-            lon += 2 * radius
+
+    for y in range(0,len(grid)):
+        #print('one row')
+        for x in range(0, len(grid[0])):
+            for p in grid[y][x]:
+                max_score = max(max_score, grid_obj.get_score(p, radius))
+                min_score = min(min_score, grid_obj.get_score(p, radius))
+
+    #update grid object with max, min scores and repickle
+    grid_obj.min_score = min_score
+    grid_obj.max_score = max_score
+    pickle.dump(grid_obj, open(grid_file, "wb" ))
     return min_score, max_score
 
 def normalize_scores(lat_lon_scores, min_score, max_score):
