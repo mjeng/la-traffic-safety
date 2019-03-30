@@ -21,13 +21,12 @@ class Grid:
         self.grid = pick.grid
 
 
-    @staticmethod
-    def create_grid(data, pickle_file_name = None):
+    def create_grid(data_file, pickle_file_name = None):
         """
         Takes in raw data, creates Grid instance.
         """
         #read CSV as pandas dataframe
-        data = pd.read_csv("grid_file")
+        data = pd.read_csv(data_file)
 
         y_num = (max_lat - min_lat + 1) // step_size
         x_num = (max_lon - min_lon + 1) // step_size
