@@ -184,6 +184,7 @@ function colorPath(result) {
 function startDrive() {
   // call twillio python stuff
   $.post("/assistant");
+  window.location.replace("/calling");
 }
 
 window.onload = initialize;
