@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template
-import os
+import os, threading
 import assistant
 
 app = Flask(__name__)
@@ -11,10 +11,10 @@ def homepage():
 def heatmap():
     return render_template("heatmap.html")
 
-@app.route("/assistant", methods=["POST"])
+@app.route("/assistant", methods=["GET"])
 def startcall():
-    assistant.run()
-    return "done"
+    threading.Thread(target=assistant.run, args=()).start()
+    return render_template("calling.html")
 
 
 
