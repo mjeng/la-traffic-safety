@@ -21,7 +21,7 @@ def get_all_scores(route_points,grid_file,radius):
     for i in range(0,len(from_js_route_pts)):
         curr_route_point = from_js_route_pts[i]
         all_scores.append(grid.get_score(curr_route_point, radius))
-        lon_lat_score.append((curr_route_point.get_lat,curr_route_point.get_lon,all_scores[i]/max(all_scores)))
+        lon_lat_score.append((curr_route_point.get_lat(),curr_route_point.get_lon(),all_scores[i]/max(all_scores)))
     print(lon_lat_score)
     return lon_lat_score
 
