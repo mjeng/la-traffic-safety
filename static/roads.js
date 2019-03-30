@@ -12,12 +12,13 @@ var directionService;
 var directionsDisplay;
 var start_name;
 var end_name;
+var marker;
 
 
 function initialize() {
-  ZOOM = 10;
+  DEFAULT_ZOOM = 10;
   var mapOptions = {
-    zoom: ZOOM,
+    zoom: DEFAULT_ZOOM,
     center: {lat: 34.070330000000006, lng: -118.45489}
   }
   map = new google.maps.Map(document.getElementById('map'), mapOptions);
@@ -30,7 +31,7 @@ function initialize() {
       document.getElementById('autoc_start'));
   autocomplete_end = new google.maps.places.Autocomplete(
       document.getElementById('autoc_end'));
-   var marker = new google.maps.Marker({
+  marker = new google.maps.Marker({
           map: map,
           anchorPoint: new google.maps.Point(0, -29)
   });
@@ -46,17 +47,15 @@ function initialize() {
 
   // autocomplete_start.bindTo('bounds', map);
   // autocomplete_end.bindTo('bounds', map);
-  autocomplete_start.addListener('directions_changed', autoSetup(autocomplete_start, marker));
-  autocomplete_end.addListener('directions_changed', autoSetup(autocomplete_end, marker));
-
-  drawColoredPath(data);
+  autocomplete_start.addListener('place_changed', (e) => {
+    autoSetup(autocomplete_start, marker);
+  });
+  autocomplete_end.addListener('place_changed', (e) => {
+    autoSetup(autocomplete_end, marker);
+  });
 }
 
 function autoSetup(autocomplete, marker) {
-  if (autocomplete == autocomplete_end) {
-    console.log("END");
-  }
-  console.log("hmmmm");
   marker.setVisible(false);
   var place = autocomplete.getPlace();
   if (place.geometry.viewport) {
@@ -64,25 +63,11 @@ function autoSetup(autocomplete, marker) {
   } else {
     console.log("we here");
     map.setCenter(place.geometry.location);
-    map.setZoom(17);
+    map.setZoom(DEFAULT_ZOOM);
   }
   marker.setPosition(place.geometry.location);
   marker.setVisible(true);
 }
-
-// Gets speed limits (for 100 segments at a time) and draws a polyline
-// color-coded by speed limit. Must be called after processing snap-to-road
-// response.
-function getAndDrawSpeedLimits() {
-  for (var i = 0; i <= placeIdArray.length / 100; i++) {
-    // Ensure that no query exceeds the max 100 placeID limit.
-    var start = i * 100;
-    var end = Math.min((i + 1) * 100 - 1, placeIdArray.length);
-
-    drawSpeedLimits(start, end);
-  }
-}
-
 
 function drawColoredPath(weightedData) {
   for (var i = 0; i < weightedData.length - 1; i++) {
@@ -105,26 +90,27 @@ function drawColoredPath(weightedData) {
 }
 
 
-function getColorForSpeed(speed_kph) {
-  if (speed_kph <= 40) {
-    return 'purple';
-  }
-  if (speed_kph <= 50) {
-    return 'blue';
-  }
-  if (speed_kph <= 60) {
-    return 'green';
-  }
-  if (speed_kph <= 80) {
-    return 'yellow';
-  }
-  if (speed_kph <= 100) {
-    return 'orange';
-  }
-  return 'red';
-}
+// function getColorForSpeed(speed_kph) {
+//   if (speed_kph <= 40) {
+//     return 'purple';
+//   }
+//   if (speed_kph <= 50) {
+//     return 'blue';
+//   }
+//   if (speed_kph <= 60) {
+//     return 'green';
+//   }
+//   if (speed_kph <= 80) {
+//     return 'yellow';
+//   }
+//   if (speed_kph <= 100) {
+//     return 'orange';
+//   }
+//   return 'red';
+// }
 
-function findRoute () {
+function findRoute() {
+  marker.setVisible(false);
   displayRoute(start_name, end_name, directionsService,
       directionsDisplay);
 }
