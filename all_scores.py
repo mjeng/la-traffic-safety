@@ -2,7 +2,7 @@ from point import Point
 from grid import Grid
 import simplejson as json
 
-def get_all_scores(route_points,grid_file):
+def get_all_scores(route_points,grid_file,radius):
     """
     Takes in route points, and the file for the grid object. Returns a list of tuples (lat,lon,score) for every point on the route
     """
@@ -18,7 +18,7 @@ def get_all_scores(route_points,grid_file):
     lon_lat_score = []
     for i in range(0,len(from_js_rout_pts)):
         curr_route_point = from_js_route_pts[i]
-        all_scores.append(grid.get_score(curr_route_point))
+        all_scores.append(grid.get_score(curr_route_point, radiu))
         ret.append((curr_route_point.get_lat,curr_route_point.get_lon,all_scores[i]))
     return lon_lat_score
 
