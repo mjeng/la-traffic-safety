@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template
-import os, threading
+import os, threading, json
 import assistant, all_scores
 
 app = Flask(__name__)
@@ -10,8 +10,8 @@ def homepage():
 @app.route("/scoreRoute", methods=["POST"])
 def score_route():
     data = str(request.get_json(force=True)).replace("'", "\"")
-    print(data, type(data))
-    return all_scores.get_all_scores(data, "pickle_test.p", 0.00015)
+    dangers = all_scores.get_all_scores(data, "pickle_test.p", 0.00015)
+    return json.dumps(dangers)
 
 @app.route("/assistant", methods=["GET"])
 def startcall():

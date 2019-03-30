@@ -42,7 +42,7 @@ function initialize() {
   });
 
   directionsDisplay.addListener('directions_changed', function() {
-    findPoints(directionsDisplay.getDirections());
+    colorPath(directionsDisplay.getDirections());
   });
 
   autocomplete_start.addListener('place_changed', (e) => {
@@ -59,7 +59,6 @@ function autoSetup(autocomplete, marker) {
   if (place.geometry.viewport) {
     map.fitBounds(place.geometry.viewport);
   } else {
-    console.log("we here");
     map.setCenter(place.geometry.location);
     map.setZoom(DEFAULT_ZOOM);
   }
@@ -157,7 +156,7 @@ function displayRoute(origin, destination, service, display) {
   });
 }
 
-function findPoints(result) {
+function colorPath(result) {
   var points = [];
   var myroute = result.routes[0].legs[0];
   var all = "";
@@ -170,12 +169,15 @@ function findPoints(result) {
     }
   }
   //console.log(JSON.stringify(points));
-  $.post("/scoreRoute", JSON.stringify(points));
+  $.post("/scoreRoute", JSON.stringify(points)).then(res => {
+    console.log(res); // TODO remove
+    drawColoredPath(res);
+  });
 }
 
 function startDrive() {
   // call twillio python stuff
-  $.get("/assistant");
+  $.post("/assistant");
 }
 
 window.onload = initialize;
