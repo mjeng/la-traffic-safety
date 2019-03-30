@@ -16,20 +16,39 @@ def get_all_scores(route_points,grid_file,radius):
     grid = Grid(pickle_file_name = grid_file)
 
     #get scores for each entry of route_points
-    all_scores = []
-    lon_lat_score = []
+    lat_lon_scores = []
     for i in range(0,len(from_js_route_pts)):
         curr_route_point = from_js_route_pts[i]
-        all_scores.append(grid.get_score(curr_route_point, radius))
+        lat_lon_scores.append((curr_route_point.get_lat(),curr_route_point.get_lon(),grid.get_score(curr_route_point, radius)))
 
-    max_score = max(all_scores)
+    #min_score, max_score = get_min_max_scores(grid_file, radius)
+    #normalized = normalize_scores(lat_lon_scores, min_score, max_score)
 
-    for i in range(0,len(from_js_route_pts)):
-        lon_lat_score.append((curr_route_point.get_lat(),curr_route_point.get_lon(),all_scores[i]/max(all_scores)))
+    #print(lon_lat_score
+    return lat_lon_scores
+    #return normalized
+
+def get_min_max_scores(grid_file, radius):
+    grid = Grid(pickle_file_name = grid_file)
+    max_score = float('-inf')
+    min_score = float('inf')
+    lat = grid.min_lat
+    lon = grid.min_lon
+    while (lat < grid.max_lat):
+        while (lon < grid.max_lon):
+            score = grid.get_score(Point(lat, lon), radius)
+            max_score = max(score, max_score)
+            min_score = min(score, min_score)
+            lat += 2 * radius
+            lon += 2 * radius
+    return min_score, max_score
+
+def normalize_scores(lat_lon_scores, min_score, max_score):
+    normalized_scores = [(score[0], score[1], (score[2] - min_score)/max_score) for score in lat_lon_scores]
+    return normalized_scores
 
 
-    #print(lon_lat_score)
-    return lon_lat_score
+
 
 def str_to_point(route_string):
     route_lat_lon_list = route_string.split(" ")
