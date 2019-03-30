@@ -4,7 +4,7 @@ import pickle
 
 class Grid:
     def __init__(self,min_lat=None,max_lat=None,min_lon=None,max_lon=None,step_size=None, pickle_file_name = None):
-        if 'pickle_file_name' ==None:
+        if pickle_file_name ==None:
             self.min_lat = min_lat // 1
             self.max_lat = (max_lat + 1) // 1
             self.min_lon = (min_lon - 1) // 1
@@ -19,9 +19,6 @@ class Grid:
             self.max_lon = float(pick.max_lon)
             self.step_size = float(pick.step_size)
             self.grid = pick.grid
-
-
-
 
     def create_grid(self,data_file, pickle_file_name = None):
         """
@@ -47,8 +44,8 @@ class Grid:
         actual_row_index, actual_col_index = self.index_helper(pt)
         potential_pts = []
         ##CHANGE
-        vtemplat=float(pt.get_lat())
-        vtemplon=float(pt.get_lon())
+        vtemplat=pt.get_lat()
+        vtemplon=pt.get_lon()
 
         new_max_lat, col_index = self.index_helper(Point(vtemplat + radius, vtemplon))
         new_min_lat, col_index = self.index_helper(Point(vtemplat - radius, vtemplon))
