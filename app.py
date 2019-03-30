@@ -2,6 +2,7 @@ from flask import Flask, request, render_template
 import os
 import all_scores
 import json
+import sys
 
 app = Flask(__name__)
 @app.route("/", methods=["GET"])
@@ -14,6 +15,10 @@ def score_route():
     data = str(request.get_json(force=True)).replace("'", "\"")
     dangers = all_scores.get_all_scores(data, "pickle_test.p", 0.00015)
     return json.dumps(dangers)
+
+@app.route("/demo", methods=["GET"])
+def demo_map():
+    return render_template("demo.html") 
 
 if __name__ == "__main__":
     app.run(debug=True)
