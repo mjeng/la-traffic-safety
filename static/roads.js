@@ -200,7 +200,7 @@ function getProcessedData(){
 function startDrive() {
   // call twillio python stuff
   $.post("/assistant", getProcessedData()).then(res =>{
-    console.log(res.length);
+    console.log(res);
   });
   window.location.replace("/calling");
 }
