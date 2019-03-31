@@ -79,7 +79,7 @@ def assess_location_demo(call, data):
         call.end()
         return
     curr_pt = data.pop(0)
-    for _ in range(min(20, len(data)):
+    for _ in range(min(20, len(data))):
         data.pop(0)
     # send data through websocket to frontend
     # get score
