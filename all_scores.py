@@ -55,19 +55,19 @@ def get_min_max_scores(grid_file, radius):
     return min_score, max_score
 
 def normalize_scores(lat_lon_scores, min_score, max_score):
-    normalized_scores = [[score[0], score[1], score[2]+20] for score in lat_lon_scores]
+    normalized_scores = [[score[0], score[1], score[2]/max_score] for score in lat_lon_scores]
     #normalized_scores = [[score[0],score[1],0.001] if score[2]<=0 else score for score in normalized_scores]
-    #normalized_scores = [[score[0],score[1],0.999] if score[2]>=1 else score for score in normalized_scores ]
-    log_norms=[]
-    for i in range(len(normalized_scores)):
-        curr_norm = normalized_scores[i]
-        #print(curr_norm[2])
-        curr_norm[2]=log10(curr_norm[2])/log10(max_score)
-        log_norms.append(curr_norm)
-    log_norms = [[score[0],score[1],0.001] if score[2]<=0 else score for score in log_norms]
-    log_norms = [[score[0],score[1],0.999] if score[2]>=1 else score for score in log_norms]
-    #normalized_scores = [[score[0],score[1],log10(score[2])] for score in normalized_scores]
-    return log_norms
+    normalized_scores = [[score[0],score[1],0.999] if score[2]>=1 else score for score in normalized_scores ]
+    # log_norms=[]
+    # for i in range(len(normalized_scores)):
+    #     curr_norm = normalized_scores[i]
+    #     #print(curr_norm[2])
+    #     curr_norm[2]=log10(curr_norm[2])/log10(max_score)
+    #     log_norms.append(curr_norm)
+    # log_norms = [[score[0],score[1],0.001] if score[2]<=0 else score for score in log_norms]
+    # log_norms = [[score[0],score[1],0.999] if score[2]>=1 else score for score in log_norms]
+    #normalized_scores = [[score[0],score[1],score[2]/max_score] for score in normalized_scores]
+    return normalized_scores
 
 
 

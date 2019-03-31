@@ -52,6 +52,7 @@ class Grid:
             row_index, col_index = self.index_helper(p)
             grid[row_index][col_index].append(p)
         self.grid = grid
+        #print(grid)
         pickle.dump(self, open(pickle_file_name, "wb" ) )
 
     def get_score(self,pt, radius):
