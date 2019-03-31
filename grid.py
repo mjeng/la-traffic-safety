@@ -13,7 +13,6 @@ class Grid:
             self.step_size = step_size
             self.grid = None
             self.max_score = None
-            self.min_score = None
         else:
             pick = pickle.load( open(pickle_file_name, "rb" ) )
             self.min_lat = float(pick.min_lat)
@@ -22,12 +21,11 @@ class Grid:
             self.max_lon = float(pick.max_lon)
             self.step_size = float(pick.step_size)
             self.grid = pick.grid
-            if (pick.max_score is not None and pick.min_score is not None):
-                self.max_score = pick.max_score
-                self.min_score = pick.min_score
+            if (pick.max_score is not None):
+                self.max_score = pick.max_score            
             else:
                 self.max_score = None
-                self.min_score = None
+
 
 
     def get_grid(self):
@@ -41,9 +39,9 @@ class Grid:
         data = pd.read_csv(data_file)
 
         y_num = (self.max_lat - self.min_lat + 1) // self.step_size
-        print(y_num)
+        #print(y_num)
         x_num = (self.max_lon - self.min_lon + 1) // self.step_size
-        print(x_num)
+        #print(x_num)
         y_num = int(y_num)
         x_num = int(x_num)
         grid = [[[] for i in range(x_num)] for j in range(y_num)]
@@ -74,13 +72,14 @@ class Grid:
 
         actual_num_valid = 0
         for p in potential_pts:
-            squared_dist = (float(pt.get_lat()) - float(p.get_lat()))**2 + (float(pt.get_lon()) - float(p.get_lon()))**2
+            curr_point_lat = pt.get_lat()
+            curr_point_lon = pt.get_lon()
+            squared_dist = (curr_point_lat - p.get_lat())**2 + (curr_point_lon - p.get_lon())**2
             if squared_dist ** 0.5 < radius:
                 actual_num_valid+=1
         return actual_num_valid
 
     def index_helper(self,pt):
-
         row_index = (float(pt.get_lat()) - self.min_lat) // self.step_size
         col_index = (float(pt.get_lon()) - self.min_lon) // self.step_size
         return int(row_index), int(col_index)
