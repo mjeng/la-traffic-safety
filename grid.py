@@ -41,7 +41,9 @@ class Grid:
         data = pd.read_csv(data_file)
 
         y_num = (self.max_lat - self.min_lat + 1) // self.step_size
+        print(y_num)
         x_num = (self.max_lon - self.min_lon + 1) // self.step_size
+        print(x_num)
         y_num = int(y_num)
         x_num = int(x_num)
         grid = [[[] for i in range(x_num)] for j in range(y_num)]

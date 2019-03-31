@@ -22,12 +22,12 @@ def get_all_scores(route_points,grid_file,radius):
     for i in range(0,len(from_js_route_pts)):
         curr_route_point = from_js_route_pts[i]
         lat_lon_scores.append([curr_route_point.get_lat(),curr_route_point.get_lon(),grid.get_score(curr_route_point, radius)])
-
+    #print([scores[2] for scores in lat_lon_scores])
     min_score, max_score = get_min_max_scores(grid_file, radius)
     #print(min_score)
     #print(max_score)
     normalized = normalize_scores(lat_lon_scores, min_score, max_score)
-    print(normalized)
+    #print(normalized)
     #print(lon_lat_score
     #return lat_lon_scores
     return normalized
@@ -61,7 +61,7 @@ def normalize_scores(lat_lon_scores, min_score, max_score):
     log_norms=[]
     for i in range(len(normalized_scores)):
         curr_norm = normalized_scores[i]
-        print(curr_norm[2])
+        #print(curr_norm[2])
         curr_norm[2]=log10(curr_norm[2])/log10(max_score)
         log_norms.append(curr_norm)
     log_norms = [[score[0],score[1],0.001] if score[2]<=0 else score for score in log_norms]
