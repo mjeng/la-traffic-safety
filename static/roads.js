@@ -58,7 +58,7 @@ function initialize() {
   autocomplete_end.addListener('place_changed', (e) => {
     autoSetup(autocomplete_end, marker);
   });
-  document.getElementById("advance").style.visibility="hidden";
+  document.getElementById("advance").style.display = "none";
   counter = 0;
   $("#drive")[0].disabled = true;
 }
@@ -188,12 +188,39 @@ function colorPath(result) {
 function startDrive() {
   // call twillio python stuff
   $.post("/assistant");
-  window.location.replace("/calling");
+  // window.location.replace("/calling");
+  displayCalling();
+
+}
+
+function displayCalling() {
+  setTimeout(() => {
+    $("#map")[0].style.display = "none";
+    $(".calling")[0].style.display = "";
+    $('.loop').html("Calling");
+    loop(0);
+  }, 200);
+}
+
+function loop(i) {
+  setTimeout((i) => {
+      if (i % 4 == 0) {
+          $('.loop').html("Calling .");
+      } else {
+          $('.loop').html($('.loop').html() + " .");
+      }
+      loop(i + 1);
+  }, 600, i);
+}
+
+function goToDemo() {
+  $("#map")[0].style.display = "";
+  $(".calling")[0].style.display = "none";
 }
 
 function demoDriveStart() {
   var geocoder = new google.maps.Geocoder();
-  document.getElementById("advance").style.visibility="visible";  
+  document.getElementById("advance").style.display = "";
   geocoder.geocode({'address': start_name}, function(results, status) {
   if (status == 'OK') {
     console.log("inside okay status");

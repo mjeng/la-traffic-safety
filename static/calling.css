@@ -2,6 +2,17 @@ html, body {
     font-family: 'Muli', sans-serif;
 }
 
+.goback button { 
+    float: right;
+    font-size: 1em;
+    padding: 10px;
+    margin: 10px;
+    /* background-color: transparent; */
+    border: none;
+    text-align: center;
+    width: 10%;
+}
+
 .loop {
     text-align: left;
     vertical-align: middle;
