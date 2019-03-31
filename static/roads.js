@@ -194,12 +194,10 @@ function startDrive() {
 }
 
 function displayCalling() {
-  setTimeout(() => {
-    $("#map")[0].style.display = "none";
-    $(".calling")[0].style.display = "";
-    $('.loop').html("Calling");
-    loop(0);
-  }, 200);
+  $("#map")[0].style.display = "none";
+  $(".calling")[0].style.display = "";
+  $('.loop').html("Calling");
+  loop(0);
 }
 
 function loop(i) {
