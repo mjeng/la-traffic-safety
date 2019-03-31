@@ -192,16 +192,10 @@ function colorPath(result) {
   });
 }
 
-function getProcessedData(){
-  var json_data = JSON.stringify(processed_data);
-  return json_data;
-}
-
 function startDrive() {
-  // call twillio python stuff
-  $.post("/assistant", getProcessedData()).then(res =>{
-    if(res === 200){
-      console.log("illenium")
+  $.post("/assistant", JSON.stringify(processed_data)).then(res =>{
+    if (res === 200) {
+      console.log("illenium");
     }
   });
   window.location.replace("/calling");

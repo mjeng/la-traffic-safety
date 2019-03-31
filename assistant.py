@@ -1,6 +1,6 @@
 from twilio.rest import Client
 import polling, time
-
+import all_scores
 
 
 
@@ -53,28 +53,28 @@ class Call:
 
 
 
-def run():
-    call = Call()
-    time.sleep(20)
-    polling.poll(
-        lambda: assess_location(call),
-        step=10,
-        poll_forever=True
-    )
-
-# def run_real(data):
+# def run():
 #     call = Call()
 #     time.sleep(20)
-#     smart_car = new Vehicle(vehicleIds[0], auth.getAccessToken());
-#     String vin = smar_car.vin();
-#
 #     polling.poll(
-#         lambda:access_location_real(call,data,smart_car),
+#         lambda: assess_location(call),
 #         step=10,
 #         poll_forever=True
 #     )
 
-# def assess_location_real(call,data,vehicle):
+# def run_real(data):
+#     call = Call()
+#     smart_car = new Vehicle(vehicleIds[0], auth.getAccessToken())
+#     vin = smar_car.vin()
+
+#     time.sleep(20)
+#     polling.poll(
+#         lambda: access_location_real(call, data, smart_car),
+#         step=10,
+#         poll_forever=True
+#     )
+
+# def assess_location(call,data,vehicle):
 #     # run smartcar API call
 #     # check if at dest, if yes return True
 #     # pass location to scoring block
@@ -82,36 +82,35 @@ def run():
 #     SmartcarResponse<VehicleLocation> locationResponse = vehicle.location();
 #     VehicleLocation locationData = locationResponse.getData();
 #     curr_loc = [locationData.getLatitude(),locationData.getLongitude()]
-#
+
 #     if len(data) == 0:
 #         call.end()
 #         return
-#
+
 #     curr_data_pt=data.pop(0)
 
-def run_demo(data):
+def run_demo(data, grid):
     data = [d[:2] for d in data]
     call = Call()
     time.sleep(20)
     polling.poll(
-        lambda: assess_location_demo(call, data),
+        lambda: assess_location_demo(call, data, grid),
         step=10,
         poll_forever=True
     )
 
-def assess_location_demo(call, data):
+def assess_location_demo(call, data, grid):
     if len(data) == 0:
         call.end()
         return
     curr_pt = data.pop(0)
     for _ in range(min(20, len(data)):
         data.pop(0)
-    # send data through websocket to frontend
-    # get score
-    score = None
+    # TODO send data through websocket to frontend
+    score = grid.get_score(curr_pt, 0.007)
     if score < 0.5:
         call.update_good()
-    elif score < 0.75:
+    elif score < 0.65:
         pass
     else:
         call.update_bad()

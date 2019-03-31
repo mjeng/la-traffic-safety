@@ -4,7 +4,7 @@ import simplejson as json
 import pickle
 from math import log10
 
-def get_all_scores(route_points,grid_file,radius):
+def get_all_scores(route_points, grid_file, radius):
     """
     Takes in route points, and the file for the grid object. Returns a list of tuples (lat,lon,score) for every point on the route
     """
@@ -19,9 +19,9 @@ def get_all_scores(route_points,grid_file,radius):
 
     #get scores for each entry of route_points
     lat_lon_scores = []
-    for i in range(0,len(from_js_route_pts)):
+    for i in range(0, len(from_js_route_pts)):
         curr_route_point = from_js_route_pts[i]
-        lat_lon_scores.append([curr_route_point.get_lat(),curr_route_point.get_lon(),grid.get_score(curr_route_point, radius)])
+        lat_lon_scores.append([curr_route_point.get_lat(), curr_route_point.get_lon(), grid.get_score(curr_route_point, radius)])
     max_score = get_min_max_scores(grid_file, radius)
     print(max_score)
     normalized = normalize_scores(lat_lon_scores, max_score)

@@ -1,8 +1,10 @@
 from flask import Flask, request, render_template, redirect, url_for
 import os, threading, json, websockets
 import assistant, all_scores
+from grid import Grid
 
 app = Flask(__name__)
+GRID = Grid(pickle_file_name="pickle_test.p") # TODO gcloud storage
 @app.route("/", methods=["GET"])
 def homepage():
     return render_template("index.html")
@@ -15,16 +17,9 @@ def score_route():
 
 @app.route("/assistant", methods=["POST"])
 def startcall():
-    data = request.get_json(force = True)
-    threading.Thread(target=assistant.run_demo, args=data)
-    return ""
-
-#For real car
-@app.route("/assistant-real", methods=["POST"])
-def startcallreal():
     # threading.Thread(target=assistant.run, args=()).start()
     data = request.get_json(force=True)
-    threading.Thread(target=assistant.run_real, args=data)
+    threading.Thread(target=assistant.run_demo, args=(data, GRID))
     return ""
 
 @app.route("/calling", methods=["GET"])
@@ -33,7 +28,7 @@ def calling():
 
 @app.route("/demo", methods=["GET"])
 def demo_map():
-    return render_template("demo.html")
+    return render_template("demo.html") 
 
 @app.route("/subscribe-ws", methods=["GET"])
 def subscribe_ws():

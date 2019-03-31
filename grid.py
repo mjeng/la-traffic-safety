@@ -57,7 +57,7 @@ class Grid:
         #pickle.dump(self, open(pickle_file_name, "wb" ) )
         cloud_pickle_dump(self, pickle_file_name)
 
-    def get_score(self,pt, radius):
+    def get_score(self, pt, radius):
         actual_row_index, actual_col_index = self.index_helper(pt)
         potential_pts = []
         ##CHANGE
