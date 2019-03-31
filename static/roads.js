@@ -189,7 +189,7 @@ function colorPath(result) {
     }
     console.log(s / weightedData.length);
   });
-  locations = points;
+  locations = weightedData;
 }
 
 function startDrive() {
@@ -221,12 +221,17 @@ function demoDriveStart() {
 
 function drive() {
   if (counter < locations.length) {
-    var lat = parseFloat(locations[counter]);
-    var ind_space = locations[counter].indexOf(' ');
-    var lng = parseFloat(locations[counter].substring(ind_space + 1));
+    var lat = locations[counter][0];
+    var lng = locations[counter][1];
+    var weight = locations[counter][2];
+
+    // var lat = parseFloat(locations[counter]);
+    // var ind_space = locations[counter].indexOf(' ');
+    // var lng = parseFloat(locations[counter].substring(ind_space + 1));
     counter = counter + 5;
     console.log(lat + " " + lng);
     circle.setCenter(new google.maps.LatLng(lat, lng));
+    $.post("/demo/update", weight);
   } 
 }
 
