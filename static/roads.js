@@ -76,8 +76,9 @@ function drawColoredPath(weightedData) {
     var coord1 = new google.maps.LatLng(weightedData[i][0], weightedData[i][1]);
     var coord2 = new google.maps.LatLng(weightedData[i+1][0], weightedData[i+1][1]);
     var weight = (weightedData[i][2] + weightedData[i+1][2]) / 2;
-    
+
     var color = getColorFromWeight(weight);
+
     var polyline = new google.maps.Polyline({
       path: [coord1, coord2],
       strokeColor: color,
@@ -103,7 +104,7 @@ function rgbToHex(r, g, b) {
 // }
 
 function getColorFromWeight(weight) {
-  weight = weight / 140;
+  weight = weight;
   if (weight <= 0.25) {
     return 'green';
   }
@@ -178,6 +179,11 @@ function colorPath(result) {
   $.post("/scoreRoute", JSON.stringify(points)).then(res => {
     weightedData = JSON.parse(res);
     drawColoredPath(weightedData);
+    var s = 0;
+    for (var i = 0; i < weightedData.length; i++) {
+      s += weightedData[i][2];
+    }
+    console.log(s / weightedData.length);
   });
 }
 
