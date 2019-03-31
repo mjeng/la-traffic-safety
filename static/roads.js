@@ -56,6 +56,8 @@ function initialize() {
   autocomplete_end.addListener('place_changed', (e) => {
     autoSetup(autocomplete_end, marker);
   });
+
+  $("#drive")[0].disabled = true;
 }
 
 function autoSetup(autocomplete, marker) {
@@ -147,6 +149,7 @@ function displayRoute(origin, destination, service, display) {
   }, function(response, status) {
     if (status === 'OK') {
       display.setDirections(response);
+      $("#drive")[0].disabled = false;
     } else {
       alert('Could not display directions due to: ' + status);
     }
