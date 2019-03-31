@@ -15,9 +15,9 @@ def score_route():
 
 @app.route("/assistant", methods=["POST"])
 def startcall():
-    # threading.Thread(target=assistant.run, args=()).start()
-    data = request.get_json(force=True)
-    threading.Thread(target=assistant.run_demo, args=data)
+    threading.Thread(target=assistant.run, args=()).start()
+    # data = request.get_json(force=True)
+    # threading.Thread(target=assistant.run_demo, args=data)
     return ""
 
 @app.route("/calling", methods=["GET"])
