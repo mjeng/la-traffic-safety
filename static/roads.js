@@ -13,6 +13,8 @@ var directionsDisplay;
 var start_name;
 var end_name;
 var marker;
+var counter;
+var locations;
 
 
 function initialize() {
@@ -56,6 +58,9 @@ function initialize() {
   autocomplete_end.addListener('place_changed', (e) => {
     autoSetup(autocomplete_end, marker);
   });
+  document.getElementById("advance").style.visibility="hidden";
+  counter = 0;
+
 }
 
 function autoSetup(autocomplete, marker) {
@@ -127,7 +132,6 @@ function getColorFromWeight(weight) {
 //   return rgbToHex(r, g, b);
 // }
 
-
 function findRoute() {
   marker.setVisible(false);
   displayRoute(start_name, end_name, directionsService,
@@ -185,6 +189,7 @@ function colorPath(result) {
     }
     console.log(s / weightedData.length);
   });
+  locations = points;
 }
 
 function startDrive() {
@@ -192,5 +197,39 @@ function startDrive() {
   $.post("/assistant");
   window.location.replace("/calling");
 }
+
+function demoDriveStart() {
+  var geocoder = new google.maps.Geocoder();
+  document.getElementById("advance").style.visibility="visible";  
+  geocoder.geocode({'address': start_name}, function(results, status) {
+  if (status == 'OK') {
+    console.log("inside okay status");
+    console.log(results[0].geometry.location.lat(), results[0].geometry.location.lng());
+    circle = new google.maps.Circle({
+      map: map,
+      center: results[0].geometry.location,
+      radius: 150,
+      strokeColor: '#000000',
+      strokeOpacity: 1,
+      fillColor: '#444444',
+      fillOpacity: 0.75
+      });
+    }
+    $.post("/assistant");
+  })
+}
+
+function drive() {
+  if (counter < locations.length) {
+    var lat = parseFloat(locations[counter]);
+    var ind_space = locations[counter].indexOf(' ');
+    var lng = parseFloat(locations[counter].substring(ind_space + 1));
+    counter = counter + 5;
+    console.log(lat + " " + lng);
+    circle.setCenter(new google.maps.LatLng(lat, lng));
+  } 
+}
+
+
 
 window.onload = initialize;
