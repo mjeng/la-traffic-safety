@@ -1,4 +1,5 @@
 
+import {Socket} from './demo-ws';
 var apiKey = 'AIzaSyD_T8LTOKpg7oO6G9V21fRx2J_F-CawP14';
 
 var map;
@@ -46,6 +47,13 @@ function initialize() {
   autocomplete_end.addListener('place_changed', (e) => {
     autoSetup(autocomplete_end, marker);
   });
+
+  initSocket();
+}
+
+function initSocket() {
+  console.log("Initializing websocket...");
+  Socket.initialize(drive);
 }
 
 function autoSetup(autocomplete, marker) {
@@ -116,3 +124,4 @@ function drive(lat, lng) {
 
 
 window.onload = initialize;
+
