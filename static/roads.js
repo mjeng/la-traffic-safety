@@ -181,13 +181,13 @@ function colorPath(result) {
       s += weightedData[i][2];
     }
     console.log(s / weightedData.length);
+    locations = weightedData;
   });
-  locations = weightedData;
 }
 
 function startDrive() {
   // call twillio python stuff
-  $.post("/assistant");
+  $.post("/demo/assistant");
   // window.location.replace("/calling");
   displayCalling();
   demoDriveStart();
@@ -219,8 +219,9 @@ function goToDemo() {
 }
 
 function demoDriveStart() {
+  console.log("running demo drive start");
   var geocoder = new google.maps.Geocoder();
-  document.getElementById("advance").style.display = "";
+  document.getElementById("advance").style.display = "block";
   geocoder.geocode({'address': start_name}, function(results, status) {
   if (status == 'OK') {
     console.log("inside okay status");
@@ -247,7 +248,7 @@ function drive() {
     counter = counter + 5;
     console.log(lat + " " + lng);
     circle.setCenter(new google.maps.LatLng(lat, lng));
-    $.post("/demo/update", weight);
+    $.post("/demo/update", JSON.stringify(weight));
   } 
 }
 

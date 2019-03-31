@@ -20,17 +20,37 @@ def startcall():
     # threading.Thread(target=assistant.run_demo, args=data)
     return ""
 
-@app.route("/calling", methods=["GET"])
-def calling():
-    return render_template("calling.html")
+# @app.route("/calling", methods=["GET"])
+# def calling():
+#     return render_template("calling.html")
 
-@app.route("/demo", methods=["GET"])
-def demo_map():
-    return render_template("demo.html") 
+@app.route("/demo/assistant", methods=["POST"])
+def startdemocall():
+    global CALL
+    CALL = assistant.Call()
+    return ""
 
-@app.route("/subscribe-ws", methods=["GET"])
-def subscribe_ws():
-    return
+@app.route("/demo/update", methods=["POST"])
+def handle_update():
+    score = float(list(request.form.to_dict().keys())[0])
+    print(score)
+    print(CALL)
+    if score < 0.5:
+        CALL.update_good()
+    elif score < 0.65:
+        pass
+    else:
+        CALL.update_bad()
+    return ""
+
+
+# @app.route("/demo", methods=["GET"])
+# def demo_map():
+#     return render_template("demo.html") 
+
+# @app.route("/subscribe-ws", methods=["GET"])
+# def subscribe_ws():
+#     return
 
 if __name__ == "__main__":
     app.run(debug=True)
