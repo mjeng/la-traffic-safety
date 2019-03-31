@@ -189,7 +189,7 @@ function colorPath(result) {
 
 function startDrive() {
   // call twillio python stuff
-  $.post("/assistant");
+  $.post("/assistant", JSON.stringify(points));
   window.location.replace("/calling");
 }
 
