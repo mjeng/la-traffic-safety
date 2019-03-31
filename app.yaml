@@ -1,0 +1,4 @@
+runtime: python37
+entrypoint: gunicorn main:app
+includes:
+  - env_variables.yaml

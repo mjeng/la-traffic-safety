@@ -16,8 +16,8 @@ class Grid:
             self.grid = None
             self.max_score = None
         else:
-            #pick = pickle.load( open(pickle_file_name, "rb" ) )
-            pick = cloud_pickle_load(pickle_file_name)
+            pick = pickle.load( open(pickle_file_name, "rb" ) )
+            #pick = cloud_pickle_load(pickle_file_name)
             self.min_lat = float(pick.min_lat)
             self.max_lat = float(pick.max_lat)
             self.min_lon = float(pick.min_lon)
@@ -54,8 +54,8 @@ class Grid:
             grid[row_index][col_index].append(p)
         self.grid = grid
         #print(grid)
-        #pickle.dump(self, open(pickle_file_name, "wb" ) )
-        cloud_pickle_dump(self, pickle_file_name)
+        pickle.dump(self, open(pickle_file_name, "wb" ) )
+        #cloud_pickle_dump(self, pickle_file_name)
 
     def get_score(self,pt, radius):
         actual_row_index, actual_col_index = self.index_helper(pt)

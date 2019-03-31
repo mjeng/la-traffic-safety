@@ -10,8 +10,6 @@ var autocomplete_start;
 var autocomplete_end;
 var directionService;
 var directionsDisplay;
-var start_name;
-var end_name;
 var marker;
 var counter;
 var locations;
@@ -21,7 +19,9 @@ function initialize() {
   DEFAULT_ZOOM = 10;
   var mapOptions = {
     zoom: DEFAULT_ZOOM,
-    center: {lat: 34.070330000000006, lng: -118.45489}
+    center: {lat: 34.070330000000006, lng: -118.45489},
+    mapTypeControl: false,
+    fullscreenControl: false
   }
   map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
@@ -60,7 +60,7 @@ function initialize() {
   });
   document.getElementById("advance").style.visibility="hidden";
   counter = 0;
-
+  $("#drive")[0].disabled = true;
 }
 
 function autoSetup(autocomplete, marker) {
@@ -133,21 +133,13 @@ function getColorFromWeight(weight) {
 // }
 
 function findRoute() {
+  var start = autocomplete_start.getPlace();
+  var end = autocomplete_end.getPlace();
+  start_name = start.formatted_address;
+  end_name = end.formatted_address;
   marker.setVisible(false);
   displayRoute(start_name, end_name, directionsService,
       directionsDisplay);
-}
-
-function saveStart() {
-  var place = autocomplete_start.getPlace();
-  document.getElementById("saved_start").innerHTML = place.formatted_address;
-  start_name = place.formatted_address;
-}
-
-function saveEnd() {
-  var place = autocomplete_end.getPlace();
-  document.getElementById("saved_end").innerHTML = place.formatted_address;
-  end_name = place.formatted_address;
 }
 
 function displayRoute(origin, destination, service, display) {
@@ -159,6 +151,7 @@ function displayRoute(origin, destination, service, display) {
   }, function(response, status) {
     if (status === 'OK') {
       display.setDirections(response);
+      $("#drive")[0].disabled = false;
     } else {
       alert('Could not display directions due to: ' + status);
     }

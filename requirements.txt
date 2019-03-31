@@ -1,0 +1,9 @@
+gunicorn
+Flask
+simplejson
+pandas
+twilio
+polling
+websockets
+google
+google-cloud-storage

@@ -18,13 +18,40 @@ html, body, #map {
 
 #bar {
     width: 240px;
-    background-color: rgba(255, 255, 255, 0.75);
-    margin: 8px;
+    background-color: rgba(240, 240, 240, 0.75);
+    margin: 50px;
     padding: 4px;
-    border-radius: 4px;
+    border-radius: 2px;
 }
 
-#autoc {
+#auto {
     width: 100%;
     box-sizing: border-box;
+}
+
+p input {
+    width: 94%;
+    height: 35px;
+    border: rgba(255, 255, 255, 0.5);
+}
+
+p.auto {
+    margin: 2px;
+}
+
+input.autoc {
+    font-size: 1.25em;
+    padding-left: 10px;
+}
+
+#bar button {
+    background-color: transparent;
+    border: none;
+    padding: 3px 20px;
+    text-align: center;
+    display: inline-block;
+    font-size: 1.25em;
+    width: 45%;
+    margin: 1px;
+    /* border: 3px solid #ffffff; */
 }
