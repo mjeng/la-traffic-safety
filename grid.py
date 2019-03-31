@@ -2,6 +2,8 @@ import pandas as pd
 from point import Point
 import pickle
 from math import log
+from grid_cloud_storage import cloud_pickle_dump
+from grid_cloud_storage import cloud_pickle_load
 
 class Grid:
     def __init__(self, min_lat=None, max_lat=None, min_lon=None, max_lon=None, step_size=None, pickle_file_name=None):
@@ -14,7 +16,8 @@ class Grid:
             self.grid = None
             self.max_score = None
         else:
-            pick = pickle.load( open(pickle_file_name, "rb" ) )
+            #pick = pickle.load( open(pickle_file_name, "rb" ) )
+            pick = cloud_pickle_load(pickle_file_name)
             self.min_lat = float(pick.min_lat)
             self.max_lat = float(pick.max_lat)
             self.min_lon = float(pick.min_lon)
@@ -22,7 +25,7 @@ class Grid:
             self.step_size = float(pick.step_size)
             self.grid = pick.grid
             if (pick.max_score is not None):
-                self.max_score = pick.max_score            
+                self.max_score = pick.max_score
             else:
                 self.max_score = None
 
@@ -51,7 +54,8 @@ class Grid:
             grid[row_index][col_index].append(p)
         self.grid = grid
         #print(grid)
-        pickle.dump(self, open(pickle_file_name, "wb" ) )
+        #pickle.dump(self, open(pickle_file_name, "wb" ) )
+        cloud_pickle_dump(self, pickle_file_name)
 
     def get_score(self,pt, radius):
         actual_row_index, actual_col_index = self.index_helper(pt)
