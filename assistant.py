@@ -2,7 +2,7 @@ from twilio.rest import Client
 import polling, time
 
 
-real_car_id = INSERT CAR ID HERE
+
 
 CURR = None
 INTRO = "https://handler.twilio.com/twiml/EHab9c307ffe2116b32a69ff4fa9447522"
@@ -62,35 +62,32 @@ def run():
         poll_forever=True
     )
 
-def run_real(data):
-    call = Call()
-    time.sleep(20)
-    smart_car = new Vehicle(vehicleIds[0], auth.getAccessToken());
-    String vin = smar_car.vin();
+# def run_real(data):
+#     call = Call()
+#     time.sleep(20)
+#     smart_car = new Vehicle(vehicleIds[0], auth.getAccessToken());
+#     String vin = smar_car.vin();
+#
+#     polling.poll(
+#         lambda:access_location_real(call,data,smart_car),
+#         step=10,
+#         poll_forever=True
+#     )
 
-    polling.poll(
-        lambda:access_location_real(call,data,smart_car),
-        step=10,
-        poll_forever=True
-    )
-
-def assess_location_real(call,data,vehicle):
-    # run smartcar API call
-    # check if at dest, if yes return True
-    # pass location to scoring block
-    #
-    SmartcarResponse<VehicleLocation> locationResponse = vehicle.location();
-    VehicleLocation locationData = locationResponse.getData();
-    curr_loc = [locationData.getLatitude(),locationData.getLongitude()]
-
-    if len(data) == 0:
-        call.end()
-        return
-
-    curr_data_pt=data.pop(0)
-
-
-
+# def assess_location_real(call,data,vehicle):
+#     # run smartcar API call
+#     # check if at dest, if yes return True
+#     # pass location to scoring block
+#     #
+#     SmartcarResponse<VehicleLocation> locationResponse = vehicle.location();
+#     VehicleLocation locationData = locationResponse.getData();
+#     curr_loc = [locationData.getLatitude(),locationData.getLongitude()]
+#
+#     if len(data) == 0:
+#         call.end()
+#         return
+#
+#     curr_data_pt=data.pop(0)
 
 def run_demo(data):
     data = [d[:2] for d in data]

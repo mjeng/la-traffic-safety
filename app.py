@@ -14,7 +14,7 @@ def score_route():
     return json.dumps(dangers)
 
 @app.route("/assistant", methods=["POST"])
-def startcall():8
+def startcall():
     data = request.get_json(force = True)
     threading.Thread(target=assistant.run_demo, args=data)
     return ""
