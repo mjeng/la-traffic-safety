@@ -190,7 +190,7 @@ function startDrive() {
   $.post("/assistant");
   // window.location.replace("/calling");
   displayCalling();
-
+  demoDriveStart();
 }
 
 function displayCalling() {
@@ -235,7 +235,6 @@ function demoDriveStart() {
       fillOpacity: 0.75
       });
     }
-    $.post("/assistant");
   })
 }
 
@@ -245,9 +244,6 @@ function drive() {
     var lng = locations[counter][1];
     var weight = locations[counter][2];
 
-    // var lat = parseFloat(locations[counter]);
-    // var ind_space = locations[counter].indexOf(' ');
-    // var lng = parseFloat(locations[counter].substring(ind_space + 1));
     counter = counter + 5;
     console.log(lat + " " + lng);
     circle.setCenter(new google.maps.LatLng(lat, lng));
