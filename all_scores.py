@@ -13,7 +13,7 @@ def get_all_scores(route_points,grid_file,radius):
 
     #import the grid 2d list here
     #grid = Grid(33.707, 34.3343, -118.1554, -118.6661, 0.01, grid_file)
-    grid = Grid(None, None, None, None, None, grid_file)
+    grid = Grid(pickle_file_name = grid_file)
 
     #get scores for each entry of route_points
     all_scores = []
@@ -28,7 +28,7 @@ def get_all_scores(route_points,grid_file,radius):
         lon_lat_score.append((curr_route_point.get_lat(),curr_route_point.get_lon(),all_scores[i]/max(all_scores)))
 
 
-    print(lon_lat_score)
+    #print(lon_lat_score)
     return lon_lat_score
 
 def str_to_point(route_string):
