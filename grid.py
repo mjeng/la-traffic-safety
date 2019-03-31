@@ -1,6 +1,7 @@
 import pandas as pd
 from point import Point
 import pickle
+from math import log
 
 class Grid:
     def __init__(self, min_lat=None, max_lat=None, min_lon=None, max_lon=None, step_size=None, pickle_file_name=None):
