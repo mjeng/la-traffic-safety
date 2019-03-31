@@ -14,6 +14,7 @@ var start_name;
 var end_name;
 var marker;
 
+processed_data=[]
 
 function initialize() {
   DEFAULT_ZOOM = 10;
@@ -178,6 +179,10 @@ function colorPath(result) {
   }
   $.post("/scoreRoute", JSON.stringify(points)).then(res => {
     weightedData = JSON.parse(res);
+
+    //store the processed data for this potential trip globally
+    processed_data = weightedData
+
     drawColoredPath(weightedData);
     var s = 0;
     for (var i = 0; i < weightedData.length; i++) {
@@ -187,9 +192,16 @@ function colorPath(result) {
   });
 }
 
+function getProcessedData(){
+  var json_data = JSON.stringify(processed_data);
+  return json_data;
+}
+
 function startDrive() {
   // call twillio python stuff
-  $.post("/assistant");
+  $.post("/assistant", getProcessedData()).then(res =>{
+    console.log(res.length);
+  });
   window.location.replace("/calling");
 }
 

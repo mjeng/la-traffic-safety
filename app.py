@@ -14,10 +14,17 @@ def score_route():
     return json.dumps(dangers)
 
 @app.route("/assistant", methods=["POST"])
-def startcall():
+def startcall():8
+    data = request.get_json(force = True)
+    threading.Thread(target=assistant.run_demo, args=data)
+    return ""
+
+#For real car
+@app.route("/assistant-real", methods=["POST"])
+def startcallreal():
     # threading.Thread(target=assistant.run, args=()).start()
     data = request.get_json(force=True)
-    threading.Thread(target=assistant.run_demo, args=data)
+    threading.Thread(target=assistant.run_real, args=data)
     return ""
 
 @app.route("/calling", methods=["GET"])
@@ -26,7 +33,7 @@ def calling():
 
 @app.route("/demo", methods=["GET"])
 def demo_map():
-    return render_template("demo.html") 
+    return render_template("demo.html")
 
 @app.route("/subscribe-ws", methods=["GET"])
 def subscribe_ws():
