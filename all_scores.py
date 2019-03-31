@@ -2,6 +2,7 @@ from point import Point
 from grid import Grid
 import simplejson as json
 import pickle
+from math import log10
 
 def get_all_scores(route_points,grid_file,radius):
     """
@@ -21,46 +22,37 @@ def get_all_scores(route_points,grid_file,radius):
     for i in range(0,len(from_js_route_pts)):
         curr_route_point = from_js_route_pts[i]
         lat_lon_scores.append([curr_route_point.get_lat(),curr_route_point.get_lon(),grid.get_score(curr_route_point, radius)])
-
-    min_score, max_score = get_min_max_scores(grid_file, radius)
-    print(min_score)
+    max_score = get_min_max_scores(grid_file, radius)
     print(max_score)
-    normalized = normalize_scores(lat_lon_scores, min_score, max_score)
-
-    #print(lon_lat_score
-    #return lat_lon_scores
+    normalized = normalize_scores(lat_lon_scores, max_score)
     return normalized
 
 def get_min_max_scores(grid_file, radius):
     grid_obj = Grid(pickle_file_name = grid_file)
     if (grid_obj.max_score is not None):
         print("here")
-        return grid_obj.min_score, grid_obj.max_score
-    grid = grid_obj.get_grid()
-    max_score = float('-inf')
-    min_score = float('inf')
+        return grid_obj.max_score
+    else:
+        grid = grid_obj.get_grid()
+        max_score = float('-inf')
 
-    for y in range(0,len(grid)):
-        #print('one row')
-        for x in range(0, len(grid[0])):
-            for p in grid[y][x]:
-                max_score = max(max_score, grid_obj.get_score(p, radius))
-                min_score = min(min_score, grid_obj.get_score(p, radius))
+        temp=[]
+        for y in range(0,len(grid)):
+            for x in range(0, len(grid[0])):
+                for p in grid[y][x]:
+                    curr_pt_score = grid_obj.get_score(p,radius)
+                    temp.append(curr_pt_score)
+                    max_score = max(max_score, curr_pt_score)
 
-    #update grid object with max, min scores and repickle
-    grid_obj.min_score = min_score
-    grid_obj.max_score = max_score
-    pickle.dump(grid_obj, open(grid_file, "wb" ))
-    return min_score, max_score
+        #update grid object with max, min scores and repickle
+        grid_obj.max_score = max_score
+        pickle.dump(grid_obj, open(grid_file, "wb" ))
+        return max_score
 
-def normalize_scores(lat_lon_scores, min_score, max_score):
-    normalized_scores = [[score[0], score[1], (score[2] - min_score)/max_score] for score in lat_lon_scores]
-    normalized_scores = [[score[0],score[1],0] if score[2]<0 else score for score in normalized_scores]
-    normalized_scores = [[score[0],score[1],1] if score[2]>1 else score for score in normalized_scores ]
+def normalize_scores(lat_lon_scores, max_score):
+    normalized_scores = [[score[0], score[1], score[2]/(max_score/2)] for score in lat_lon_scores]
+    normalized_scores = [[score[0],score[1],0.999] if score[2]>=1 else score for score in normalized_scores ]
     return normalized_scores
-
-
-
 
 def str_to_point(route_string):
     route_lat_lon_list = route_string.split(" ")

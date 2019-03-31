@@ -10,7 +10,7 @@ def homepage():
 @app.route("/scoreRoute", methods=["POST"])
 def score_route():
     data = str(request.get_json(force=True)).replace("'", "\"")
-    dangers = all_scores.get_all_scores(data, "pickle_test.p", 0.00015)
+    dangers = all_scores.get_all_scores(data, "pickle_test.p", 0.007)
     return json.dumps(dangers)
 
 @app.route("/assistant", methods=["POST"])
