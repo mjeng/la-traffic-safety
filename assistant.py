@@ -47,23 +47,7 @@ class Call:
         return
 
 
-import random
-def assess_location(call):
-    # run smartcar API call
-    # check if at dest, if yes return True
-    # pass location to scoring block
-    #
-    n = random.randint(1, 11)
-    print("Running poll with num", n)
-    if n <= 5:
-        call.update_good()
-    elif n <= 10:
-        call.update_bad()
-    else:
-        call.end()
-        return True
-    return False
-
+    
 def run():
     call = Call()
     time.sleep(20)
@@ -72,3 +56,37 @@ def run():
         step=10,
         poll_forever=True
     )
+    
+def assess_location(call):
+    # run smartcar API call
+    # check if at dest, if yes return True
+    # pass location to scoring block
+    #
+    return
+
+def run_demo(data):
+    data = [d[:2] for d in data]
+    call = Call()
+    time.sleep(20)
+    polling.poll(
+        lambda: assess_location_demo(call, data),
+        step=10,
+        poll_forever=True
+    )
+
+def assess_location_demo(call, data):
+    if len(data) == 0:
+        call.end()
+        return
+    curr_pt = data.pop(0)
+    for _ in range(min(20, len(data)):
+        data.pop(0)
+    # send data through websocket to frontend
+    # get score
+    score = None
+    if score < 0.5:
+        call.update_good()
+    elif score < 0.75:
+        pass
+    else:
+        call.update_bad()
