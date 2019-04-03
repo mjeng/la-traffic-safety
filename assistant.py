@@ -13,11 +13,10 @@ client = Client(account_sid, auth_token)
 class Call:
     GOOD = "good"
     BAD = "bad"
-    def __init__(self):
-        print(list(os.environ.items()))
+    def __init__(self, phone_num):
         self.call = client.calls.create(
                                 url=INTRO,
-                                to=os.environ.get("TWILIO_TO"),
+                                to=phone_num,
                                 from_=os.environ.get("TWILIO_FROM")
                             )
         self.last_state = Call.GOOD

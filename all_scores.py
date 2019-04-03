@@ -11,7 +11,6 @@ def get_all_scores(route_points,grid_file,radius):
     #parse the string of list of lists into a list of points
     from_js_route_pts = json.loads(route_points)
     from_js_route_pts = [str_to_point(s) for s in from_js_route_pts]
-    #print(from_js_route_pts)
 
     #import the grid 2d list here
     #grid = Grid(33.707, 34.3343, -118.1554, -118.6661, 0.01, grid_file)
@@ -23,14 +22,12 @@ def get_all_scores(route_points,grid_file,radius):
         curr_route_point = from_js_route_pts[i]
         lat_lon_scores.append([curr_route_point.get_lat(),curr_route_point.get_lon(),grid.get_score(curr_route_point, radius)])
     max_score = get_min_max_scores(grid_file, radius)
-    print(max_score)
     normalized = normalize_scores(lat_lon_scores, max_score)
     return normalized
 
 def get_min_max_scores(grid_file, radius):
     grid_obj = Grid(pickle_file_name = grid_file)
     if (grid_obj.max_score is not None):
-        print("here")
         return grid_obj.max_score
     else:
         grid = grid_obj.get_grid()

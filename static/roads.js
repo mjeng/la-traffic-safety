@@ -61,6 +61,7 @@ function initialize() {
   document.getElementById("advance").style.display = "none";
   counter = 0;
   $("#drive")[0].disabled = true;
+  $("#phone")[0].style.display = "none";
 }
 
 function autoSetup(autocomplete, marker) {
@@ -152,6 +153,7 @@ function displayRoute(origin, destination, service, display) {
     if (status === 'OK') {
       display.setDirections(response);
       $("#drive")[0].disabled = false;
+      $("#phone")[0].style.display = "";
     } else {
       alert('Could not display directions due to: ' + status);
     }
@@ -187,8 +189,9 @@ function colorPath(result) {
 
 function startDrive() {
   // call twillio python stuff
-  $.post("/demo/assistant");
+  $.post("/demo/assistant", JSON.stringify($("#phone")[0].value));
   // window.location.replace("/calling");
+  $("#phone")[0].style.display = "none";
   displayCalling();
   demoDriveStart();
 }

@@ -26,15 +26,15 @@ def startcall():
 
 @app.route("/demo/assistant", methods=["POST"])
 def startdemocall():
+    phone_num = "+1{}".format(list(request.form.to_dict().keys())[0])
     global CALL
-    CALL = assistant.Call()
+    CALL = assistant.Call(phone_num)
     return ""
 
 @app.route("/demo/update", methods=["POST"])
 def handle_update():
     score = float(list(request.form.to_dict().keys())[0])
-    print(score)
-    print(CALL)
+    print("Road segment index: {}".format(score))
     if score < 0.5:
         CALL.update_good()
     elif score < 0.65:

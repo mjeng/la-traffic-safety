@@ -55,3 +55,11 @@ input.autoc {
     margin: 1px;
     /* border: 3px solid #ffffff; */
 }
+
+#phone {
+    margin: 2px;
+    font-size: 1.25em;
+    text-align: center;
+    width: 96%;
+    border: none;
+}
